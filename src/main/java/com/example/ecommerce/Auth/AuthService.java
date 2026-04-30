@@ -1,6 +1,7 @@
 package com.example.ecommerce.Auth;
 
 import com.example.ecommerce.Auth.dto.AuthResponse;
+import com.example.ecommerce.Auth.dto.LoginRequest;
 import com.example.ecommerce.Auth.dto.RegisterRequest;
 import com.example.ecommerce.Security.JwtUtil;
 import com.example.ecommerce.User.User;
@@ -24,6 +25,14 @@ public class AuthService {
                 .build();
         authRepository.save(user);
         String token = jwtutil.generateToken(user.getEmail());
-        return new AuthResponse();
+        return new AuthResponse(token);
+    }
+    public AuthResponse login(LoginRequest request){
+        User user = authRepository.findByEmail(request.getEmail()).orElseThrow(()->  new RuntimeException("error"));
+        if(!passwordEncoder.matches(request.getPassword(),user.getPassword())){
+            throw new RuntimeException("wrong password");
+        }
+        String token = jwtutil.generateToken(request.getEmail());
+        return new AuthResponse(token);
     }
 }
