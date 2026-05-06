@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Data
 @AllArgsConstructor
 public class OrderItemRequest {
-    private Orders order;
+    private int quantity;
     private Long productId;
 
 
