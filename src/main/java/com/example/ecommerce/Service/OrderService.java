@@ -12,14 +12,12 @@ import com.example.ecommerce.Repositories.OrderRepository;
 import com.example.ecommerce.Repositories.ProductRepository;
 import com.example.ecommerce.User.User;
 import lombok.RequiredArgsConstructor;
-import org.springframework.orm.hibernate5.SpringSessionContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.swing.*;
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -65,5 +63,34 @@ public class OrderService {
                 saved.getStatus(),
                 itemsResponses,
                 saved.getPrice());
+    }
+    public void deleteOrder(Long orderId){
+        Orders order = orderRepository.findById(orderId).orElseThrow(()-> new RuntimeException("order doesnt found"));
+        orderRepository.delete(order);
+    }
+    public OrderResponse addItemToOrder(Long orderId, OrderItemRequest request){
+       Orders order = orderRepository.findById(orderId).orElseThrow(()-> new RuntimeException("order doesnt found"));
+       Product product = productRepository.findById(request.getProductId()).orElseThrow(()-> new RuntimeException("product doesnt found"));
+       OrderItems newItem = OrderItems.builder()
+               .product(product)
+               .orders(order)
+               .priceAtPurchase(product.getPrice())
+               .quantity(request.getQuantity())
+               .build();
+       List<OrderItems> items= new ArrayList<>(order.getItems());
+       BigDecimal newTotal = items.stream()
+                       .map(item-> item.getPriceAtPurchase().multiply(BigDecimal.valueOf(item.getQuantity())))
+                               .reduce(BigDecimal.ZERO,BigDecimal::add);
+       items.add(newItem);
+       order.setItems(items);
+       Orders saved = orderRepository.save(order);
+       List<OrderItemsResponse> itemsResponses = saved.getItems().stream()
+               .map(item->new OrderItemsResponse(
+                       item.getProduct().getId()
+                                ,item.getProduct().getName()
+                                        ,item.getQuantity()
+                                            ,item.getPriceAtPurchase()
+               )).toList();
+       return new OrderResponse(saved.getId(), saved.getStatus(),itemsResponses,saved.getPrice());
     }
 }
