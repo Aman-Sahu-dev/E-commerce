@@ -16,7 +16,7 @@ import org.springframework.stereotype.Component;
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class SecurityConfig {
-    private JwtFilter jwtFilter;
+    private final JwtFilter jwtFilter;
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer(){
         return( web)-> web.ignoring().requestMatchers("/","/index.html", "/static/**", "/css/**", "/js/**");

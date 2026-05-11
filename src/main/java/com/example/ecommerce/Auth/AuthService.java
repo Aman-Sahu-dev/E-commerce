@@ -12,9 +12,9 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
-    private AuthRepository authRepository;
-    private PasswordEncoder passwordEncoder;
-    private JwtUtil jwtutil;
+    private final AuthRepository authRepository;
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtutil;
     public AuthResponse register(RegisterRequest request){
         User user = User.builder()
                 .name(request.getName())

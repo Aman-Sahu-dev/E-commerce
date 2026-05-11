@@ -22,6 +22,7 @@ public class User {
     private String email;
     @Column(name ="password",nullable = false)
     private String password;
+    @Builder.Default
     @Column(name ="role")
     private String role = "User";
     @Column(name ="phone")

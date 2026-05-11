@@ -14,8 +14,8 @@ import java.util.Date;
 public class JwtUtil {
     @Value("${jwt.secret}")
     private String secret;
-    @Value("${jwt.expriation}")
-    private long expriation;
+    @Value("${jwt.expiration}")
+    private long expiration;
     private SecretKey getSignKey(){
         return Keys.hmacShaKeyFor(secret.getBytes());
     }
@@ -23,7 +23,7 @@ public class JwtUtil {
         return Jwts.builder()
                 .subject(email)
                 .issuedAt(new Date())
-                .expiration(new Date(System.currentTimeMillis()+expriation))
+                .expiration(new Date(System.currentTimeMillis()+expiration))
                 .signWith(getSignKey())
                 .compact();
     }

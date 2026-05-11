@@ -4,11 +4,11 @@ import com.example.ecommerce.Dto.CategoryResponse;
 import com.example.ecommerce.Dto.CategorySelectRequest;
 import com.example.ecommerce.Model.Category;
 import com.example.ecommerce.Repositories.CategoryRepository;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-
 @Service
 @RequiredArgsConstructor
 public class CategoryService {

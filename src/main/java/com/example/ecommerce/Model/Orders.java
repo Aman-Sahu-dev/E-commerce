@@ -28,7 +28,7 @@ public class Orders { //orders are like cart and order_items are products belong
     private String status;
     private LocalDateTime created_at;
 
-    @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "orders",cascade = CascadeType.ALL, orphanRemoval = true)
     private List<OrderItems> items;
 
     
